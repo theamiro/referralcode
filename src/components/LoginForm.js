@@ -8,22 +8,18 @@ export default function LoginForm() {
 	const [password, setPassword] = useState("")
 	function handleSignIn(event) {
 		event.preventDefault()
+		console.log(username, password)
 		const user = {
 			username: username,
 			password: password,
 		}
+		console.log(user)
 		axios
-			.post(process.env.REACT_APP_API_BASE + "/login", {
-				headers: {
-					"Content-Type": "application/json",
-				},
-				data: JSON.stringify({ user }),
-			})
+			.post(process.env.REACT_APP_API_BASE + "/login", user)
 			.then((response) => {
 				console.log(response)
 				if (response.status >= 200 && response.status < 300) {
-                    setToken(response)
-                    
+					setToken(response)
 				} else {
 					setError("Wrong username/password combination")
 				}
