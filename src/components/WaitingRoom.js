@@ -20,6 +20,7 @@ export default function WaitingRoom() {
 				</div>
 			</div>
 			<div className="col-md-8">
+				<h2>Waiting List</h2>
 				<table className="table table-light">
 					<thead>
 						<tr>

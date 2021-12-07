@@ -17,6 +17,7 @@ export default function ClaimedReferrals() {
 	return (
 		<div className="row">
 			<div className="col-md-8">
+				<h2>Claimed Referrals</h2>
 				<table className="table table-light">
 					<thead>
 						<tr>

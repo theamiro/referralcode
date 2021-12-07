@@ -2,8 +2,16 @@ import React, { useState } from "react"
 import axios from "axios"
 
 export default function LoginForm() {
-	const user = useState()
-	function handleSignIn() {
+	const [setToken] = useState()
+	const [setError] = useState("")
+	const [username, setUsername] = useState("")
+	const [password, setPassword] = useState("")
+	function handleSignIn(event) {
+		event.preventDefault()
+		const user = {
+			username: username,
+			password: password,
+		}
 		axios
 			.post(process.env.REACT_APP_API_BASE + "/login", {
 				headers: {
@@ -13,6 +21,12 @@ export default function LoginForm() {
 			})
 			.then((response) => {
 				console.log(response)
+				if (response.status >= 200 && response.status < 300) {
+                    setToken(response)
+                    
+				} else {
+					setError("Wrong username/password combination")
+				}
 			})
 			.catch((error) => {
 				console.log(error)
@@ -28,11 +42,11 @@ export default function LoginForm() {
 						<form onSubmit={handleSignIn}>
 							<div className="form-group mb-3">
 								<label htmlFor="username">Username</label>
-								<input type="text" className="form-control" />
+								<input type="text" className="form-control" onChange={(event) => setUsername(event.target.value)} />
 							</div>
 							<div className="form-group mb-3">
 								<label htmlFor="password">Password</label>
-								<input type="password" className="form-control" />
+								<input type="password" className="form-control" onChange={(event) => setPassword(event.target.value)} />
 							</div>
 							<div className="d-grid">
 								<input type="submit" className="btn btn-primary" value="Sign in" />
