@@ -1,11 +1,16 @@
 import React from "react"
 import ReactDOM from "react-dom"
+import { BrowserRouter as Router } from "react-router-dom"
 import "./index.css"
+
 import App from "./App"
 
-ReactDOM.render(
+const element = (
 	<React.StrictMode>
-		<App />
-	</React.StrictMode>,
-	document.getElementById("root")
+		<Router>
+			<App />
+		</Router>
+	</React.StrictMode>
 )
+const container = document.getElementById("root")
+ReactDOM.render(element, container)

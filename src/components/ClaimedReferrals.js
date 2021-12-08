@@ -4,15 +4,15 @@ import axios from "axios"
 export default function ClaimedReferrals() {
 	const [claimedReferrals, setClaimedReferrals] = useState([])
 	useEffect(() => {
-		return () => {
-			axios
+		async function fetchClaimedReferrals() {
+			await axios
 				.get(process.env.REACT_APP_API_BASE + "/claimed_referrals")
 				.then((response) => {
-					console.log(response.data.data)
 					setClaimedReferrals(response.data.data)
 				})
 				.catch((error) => console.error(error))
 		}
+		fetchClaimedReferrals()
 	}, [])
 	return (
 		<div className="row">

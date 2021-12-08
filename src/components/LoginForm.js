@@ -1,11 +1,14 @@
 import React, { useState } from "react"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 export default function LoginForm() {
 	const [setToken] = useState()
 	const [setError] = useState("")
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
+	const navigate = useNavigate()
+
 	function handleSignIn(event) {
 		event.preventDefault()
 		console.log(username, password)
@@ -19,7 +22,8 @@ export default function LoginForm() {
 			.then((response) => {
 				console.log(response)
 				if (response.status >= 200 && response.status < 300) {
-					setToken(response)
+					// setToken(response)
+					navigate("/waiting-room", { replace: true })
 				} else {
 					setError("Wrong username/password combination")
 				}
