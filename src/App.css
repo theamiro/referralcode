@@ -3,3 +3,10 @@
 	width: 30px;
 	border-radius: 50%;
 }
+body {
+	background-color: antiquewhite;
+}
+.card {
+	border-radius: 8px;
+	border: 0;
+}
