@@ -3,26 +3,34 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
 export default function LoginForm() {
-	const [setToken] = useState()
-	const [setError] = useState("")
-	const [username, setUsername] = useState("")
-	const [password, setPassword] = useState("")
+	const [token, setToken] = useState("")
+	const [error, setError] = useState("")
+	const [user, setUser] = useState({ username: "", password: "" })
 	const navigate = useNavigate()
 
-	function handleSignIn(event) {
-		event.preventDefault()
-		console.log(username, password)
-		const user = {
-			username: username,
-			password: password,
-		}
+	function handleUsernameChange(event) {
+		setUser((prevState) => {
+			return { ...prevState, username: event.target.value }
+		})
 		console.log(user)
-		axios
+	}
+
+	function handlePasswordChange(event) {
+		setUser((prevState) => {
+			return { ...prevState, password: event.target.value }
+		})
+		console.log(user)
+	}
+
+	async function handleSignIn(event) {
+		event.preventDefault()
+		console.log(user)
+		await axios
 			.post(process.env.REACT_APP_API_BASE + "/login", user)
 			.then((response) => {
 				console.log(response)
 				if (response.status >= 200 && response.status < 300) {
-					// setToken(response)
+					setToken(response)
 					navigate("/waiting-room", { replace: true })
 				} else {
 					setError("Wrong username/password combination")
@@ -39,14 +47,17 @@ export default function LoginForm() {
 				<div className="card py-5">
 					<div className="card-body">
 						<h2>Sign in</h2>
+						<div className="alert alert-secondary" role="alert">
+							{error}
+						</div>
 						<form onSubmit={handleSignIn}>
 							<div className="form-group mb-3">
 								<label htmlFor="username">Username</label>
-								<input type="text" className="form-control" onChange={(event) => setUsername(event.target.value)} />
+								<input type="text" className="form-control" onChange={handleUsernameChange} />
 							</div>
 							<div className="form-group mb-3">
 								<label htmlFor="password">Password</label>
-								<input type="password" className="form-control" onChange={(event) => setPassword(event.target.value)} />
+								<input type="password" className="form-control" onChange={handlePasswordChange} />
 							</div>
 							<div className="d-grid">
 								<input type="submit" className="btn btn-primary" value="Sign in" />

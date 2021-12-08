@@ -1,12 +1,11 @@
 import "./App.css"
-import React, { useState } from "react"
+import React from "react"
 import { Routes, Route, Link } from "react-router-dom"
 import ClaimedReferrals from "./components/ClaimedReferrals"
 import LoginForm from "./components/LoginForm"
 import WaitingRoom from "./components/WaitingRoom"
 
 function App() {
-	const [token] = useState()
 	return (
 		<div className="container">
 			<div className="row">
