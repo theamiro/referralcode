@@ -1,30 +1,33 @@
 import "./App.css"
 import React, { useState } from "react"
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import ClaimedReferrals from "./components/ClaimedReferrals"
 import LoginForm from "./components/LoginForm"
 import WaitingRoom from "./components/WaitingRoom"
+import Navbar from "./components/Navbar"
+import { UserContext } from "./UserContext"
 
 function App() {
-	const [token] = useState()
-	if (!token) {
-		return <LoginForm />
-	}
+	const [token, setToken] = useState(null)
 	return (
-		<Router>
-			<div className="container">
-				<div className="row">
-					<div class="d-flex">
-						<Link to="/claimed-referrals">Claimed Referrals</Link>
-						<Link to="/waiting-room">Waiting Room</Link>
-					</div>
+		<div className="min-vh-100">
+			<UserContext.Provider value={{ token, setToken }}>
+				{token && <Navbar />}
+				{/* This can be improved using react-router-dom Private Routes */}
+				<div className="container">
+					<Routes>
+						{token ? (
+							<>
+								<Route path="/waiting-room" element={<WaitingRoom />} />
+								<Route path="/claimed-referrals" element={<ClaimedReferrals />} />
+							</>
+						) : (
+							<Route path="/" exact element={<LoginForm />} />
+						)}
+					</Routes>
 				</div>
-				<Routes>
-					<Route path="/waiting-room" element={<WaitingRoom />} />
-					<Route path="/claimed-referrals" element={<ClaimedReferrals />} />
-				</Routes>
-			</div>
-		</Router>
+			</UserContext.Provider>
+		</div>
 	)
 }
 
