@@ -1,52 +1,33 @@
 import "./App.css"
 import React, { useState } from "react"
-import { Routes, Route, Link, useNavigate } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import ClaimedReferrals from "./components/ClaimedReferrals"
 import LoginForm from "./components/LoginForm"
 import WaitingRoom from "./components/WaitingRoom"
+import Navbar from "./components/Navbar"
+import { UserContext } from "./UserContext"
 
 function App() {
-	const [token, setToken] = useState()
-	const navigate = useNavigate()
-
-	function logout(event) {
-		event.preventDefault()
-		setToken(null)
-		navigate("/", { replace: true })
-	}
+	const [token, setToken] = useState(null)
 	return (
-		<>
-			<nav className="navbar navbar-expand-lg navbar-light bg-light">
+		<div className="min-vh-100">
+			<UserContext.Provider value={{ token, setToken }}>
+				{token && <Navbar />}
+				{/* This can be improved using react-router-dom Private Routes */}
 				<div className="container">
-					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-						<li className="nav-item">
-							<Link className="nav-link" to="/claimed-referrals">
-								Claimed Referrals
-							</Link>
-						</li>
-						<li className="nav-item">
-							<Link className="nav-link" to="/waiting-room">
-								Waiting Room
-							</Link>
-						</li>
-						{!token && (
-							<li className="nav-item">
-								<button className="btn btn-primary" onClick={logout}>
-									Logout
-								</button>
-							</li>
+					<Routes>
+						{token ? (
+							<>
+								<Route path="/waiting-room" element={<WaitingRoom />} />
+								<Route path="/claimed-referrals" element={<ClaimedReferrals />} />
+							</>
+						) : (
+							<Route path="/" exact element={<LoginForm />} />
 						)}
-					</ul>
+					</Routes>
 				</div>
-			</nav>
-			<div className="container">
-				<Routes>
-					<Route path="/" element={<LoginForm />} />
-					<Route path="/waiting-room" element={<WaitingRoom />} />
-					<Route path="/claimed-referrals" element={<ClaimedReferrals />} />
-				</Routes>
-			</div>
-		</>
+			</UserContext.Provider>
+		</div>
 	)
 }
 

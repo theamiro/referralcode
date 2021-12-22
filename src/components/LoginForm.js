@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import { UserContext } from "../UserContext"
 
 export default function LoginForm() {
-	const [token, setToken] = useState()
+	const { token, setToken } = useContext(UserContext)
 	const [error, setError] = useState("")
 	const [user, setUser] = useState({ username: "", password: "" })
 	const [isLoading, setIsLoading] = useState(false)
@@ -28,8 +29,7 @@ export default function LoginForm() {
 			.post(process.env.REACT_APP_API_BASE + "/login", user)
 			.then((response) => {
 				if (response.status >= 200 && response.status < 300) {
-					setToken(response.data)
-					console.log(token)
+					setToken(process.env.REACT_APP_DUMMY_TOKEN)
 					setIsLoading(false)
 					navigate("/waiting-room", { replace: true })
 				} else {
@@ -55,6 +55,7 @@ export default function LoginForm() {
 								{error}
 							</div>
 						)}
+						{token}
 						<form onSubmit={handleSignIn}>
 							<div className="form-group mb-3">
 								<label htmlFor="username">Username</label>
